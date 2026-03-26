@@ -2,7 +2,7 @@ local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local HttpService = game:GetService("HttpService")
 
--- 1. เตรียมข้อมูล Config
+-- 1. Configuration Table
 local vehicleConfig = {
     ["wheels"] = {
         ["RR"] = {["damping"] = 3, ["steerAngle"] = 0, ["Power"] = true, ["brake"] = true, ["collideRadius"] = 0.5, ["height"] = 0.62, ["friction"] = 800, ["freeLength"] = 0.62, ["stiffness"] = 50},
@@ -30,34 +30,36 @@ local vehicleConfig = {
     ["PeakPower"] = 120
 }
 
--- 2. ฟังก์ชันหลักสำหรับอัปเดต
+-- 2. Update Function
 local function updateVehicleConfig()
-    -- ใช้ pcall เพื่อป้องกัน Script หยุดทำงานหากหา Instance ไม่เจอ
     local success, err = pcall(function()
-        -- แนะนำให้ใช้ชื่อ LocalPlayer แทนการ Hardcode ชื่อ
-        local userVehicles = workspace:WaitForChild("system"):WaitForChild("UserVehicles")
+        -- Safely find the system folder
+        local system = workspace:WaitForChild("system", 10)
+        if not system then error("System folder not found in time") end
+        
+        local userVehicles = system:WaitForChild("UserVehicles", 5)
+        
+        -- Check for player's specific vehicle folder first
         local playerVehicleFolder = userVehicles:FindFirstChild(LocalPlayer.Name) 
-            or userVehicles:FindFirstChild("MCNDBV") -- Fallback กรณีหาชื่อไม่เจอ
+            or userVehicles:FindFirstChild("MCNDBV")
         
         if playerVehicleFolder then
-            local configInfo = playerVehicleFolder:WaitForChild("configInfo")
+            local configInfo = playerVehicleFolder:FindFirstChild("configInfo")
             
-            -- ตรวจสอบว่าเป็น StringValue หรือไม่
-            if configInfo:IsA("StringValue") then
+            if configInfo and configInfo:IsA("StringValue") then
                 configInfo.Value = HttpService:JSONEncode(vehicleConfig)
-                print("✅ [Success]: Config updated for " .. playerVehicleFolder.Name)
+                print("✅ Config updated for: " .. playerVehicleFolder.Name)
             else
-                error("configInfo is not a StringValue")
+                error("configInfo (StringValue) missing in vehicle folder")
             end
         else
-            error("Vehicle folder for player not found")
+            error("No vehicle folder found for " .. LocalPlayer.Name)
         end
     end)
 
     if not success then
-        warn("⚠️ [Error]: " .. err)
+        warn("⚠️ Update Failed: " .. err)
     end
 end
 
--- เรียกใช้งาน
 updateVehicleConfig()
