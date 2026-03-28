@@ -10,7 +10,7 @@ local vehicleConfig = {
         ["FR"] = {["damping"] = 3, ["steerAngle"] = 25, ["Power"] = true, ["brake"] = true, ["collideRadius"] = 0.5, ["height"] = 0.62, ["friction"] = 800, ["freeLength"] = 0.62, ["stiffness"] = 50},
         ["FL"] = {["damping"] = 3, ["steerAngle"] = 25, ["Power"] = true, ["brake"] = true, ["collideRadius"] = 0.5, ["height"] = 0.62, ["friction"] = 800, ["freeLength"] = 0.62, ["stiffness"] = 50}
     },
-    ["gravity"] = 100,
+    ["gravity"] = 200,
     ["SlipSoundThreshold"] = 150,
     ["transmission"] = {3.5, 2.8, 2.2, 1.8, 1.4, 1.1},
     ["minSteer"] = 0.1,
@@ -22,12 +22,12 @@ local vehicleConfig = {
     ["steerDecay"] = 140,
     ["maxSteer"] = 0.2,
     ["engineSoundMul"] = 57,
-    ["engineSoundId"] = "5089922566",
+    ["engineSoundId"] = "0",
     ["IdleRPM"] = 40,
     ["throttleLerp"] = 0.1,
     ["vehicleVibrateIntensity"] = 0.00003333333333333,
     ["clutchLerp"] = 0.1,
-    ["PeakPower"] = 120
+    ["PeakPower"] = 100
 }
 
 -- 2. Update Function
